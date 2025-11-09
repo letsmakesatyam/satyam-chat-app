@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.route.js';
 import connectDB from './lib/db.js';
 
@@ -13,6 +14,8 @@ const connectToDB = async () => {
     console.log(`server is running on http://localhost:${PORT}`);
     });
 }
+app.use(express.json());
+app.use(cookieParser());
 app.use('/api/auth' , authRoutes);
 
 
