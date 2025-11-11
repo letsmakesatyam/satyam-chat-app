@@ -30,6 +30,7 @@ export const signup = async (req, res) => {
                 _id: newUser._id,
                 email: newUser.email,
                 fullname: newUser.fullname, 
+                profilePic: newUser.profilePic
             }); 
 
         }
@@ -60,13 +61,13 @@ export const login = async(req, res) => {
         if(!isMatch){
             return res.status(400).json({ message: "Invalid credentials." });
         }   
-        const token = generateToken(user._id , res);
+        await generateToken(user._id , res);
         res.status(200).json({
             _id: user._id,
             email: user.email,
             fullname: user.fullname, 
             profilePic: user.profilePic,
-            token: token
+            
             
         }); 
         
