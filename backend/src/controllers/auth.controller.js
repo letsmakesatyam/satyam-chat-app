@@ -119,3 +119,19 @@ export const updateProfile = async (req, res) => {
 
     }   
 };
+export const checkAuth = async (req, res) => {
+    try{
+        const user = req.user._id;
+        
+        res.status(200).json({
+            _id: user._id,
+            email: user.email,
+            fullname: user.fullname,
+            profilePic: user.profilePic
+        });
+    }
+    catch(err){
+        console.error("Check Auth Error:", err);
+        res.status(500).json({ message: "Server Error" });
+    }   
+};

@@ -1,4 +1,4 @@
-import React from 'react'
+import React , {useEffect} from 'react'
 import Navbar from './components/Navbar.jsx'
 import { Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
@@ -6,9 +6,14 @@ import SignupPage from './pages/SignupPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx' 
+import { useAuthStore } from './store/useAuthStore.js'
 const App = () => {
+  const {authUser , checkAuth } = useAuthStore();
+  useEffect(() => {
+    checkAuth();
+  }, []);
   return (
-    <div>
+    <div data-theme="synthwave">
       <Navbar />
       <Routes>
         <Route path='/' element={<HomePage/>} />
