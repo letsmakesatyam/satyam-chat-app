@@ -4,7 +4,7 @@ const Navbar = () => {
     const {authUser} = useAuthStore();
   return (
     <div>
-      
+      <h1>Navbar</h1>
     </div>
   )
 }
