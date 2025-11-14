@@ -15,7 +15,7 @@ const App = () => {
   useEffect(() => {
     checkAuth();
   }, []);
-  /*if(isCheckingAuth , !authUser){
+  if(isCheckingAuth  && !authUser){
     return(
        <div
         data-theme="synthwave"
@@ -27,7 +27,7 @@ const App = () => {
         </p>
       </div>
     )
-  }*/
+  }
   return (
     <div data-theme="synthwave">
 
@@ -40,7 +40,7 @@ const App = () => {
         <Route path="/profile" element={ authUser ? <ProfilePage/>: <Navigate to= "/login" /> } />
       </Routes>
     <Toaster />
-    </div>
+    </div>  
   )
 }
 

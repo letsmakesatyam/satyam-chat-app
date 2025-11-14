@@ -16,7 +16,7 @@ const connectToDB = async () => {
     console.log(`server is running on http://localhost:${PORT}`);
     });
 }
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
 app.use(cors({
     origin: "http://localhost:5173",

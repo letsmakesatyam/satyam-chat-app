@@ -120,18 +120,25 @@ export const updateProfile = async (req, res) => {
     }   
 };
 export const checkAuth = async (req, res) => {
-    try{
-        const user = req.user._id;
-        
+    try {
+        const user = await User.findById(req.user._id).select("-password");
+
+        if (!user) {
+            return res.status(401).json({ message: "Not authorized" });
+        }
+
         res.status(200).json({
-            _id: user._id,
-            email: user.email,
-            fullname: user.fullname,
-            profilePic: user.profilePic
+            user: {
+                _id: user._id,
+                email: user.email,
+                fullname: user.fullname,
+                profilePic: user.profilePic,
+                createdAt: user.createdAt
+            }
         });
-    }
-    catch(err){
+
+    } catch (err) {
         console.error("Check Auth Error:", err);
         res.status(500).json({ message: "Server Error" });
-    }   
+    }
 };
