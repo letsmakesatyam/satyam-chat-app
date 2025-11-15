@@ -9,16 +9,18 @@ import LoginPage from './pages/LoginPage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx' 
 import { useAuthStore } from './store/useAuthStore.js'
+import { useThemeStore } from './store/useThemeStore.js'
 
 const App = () => {
   const {authUser , checkAuth , isCheckingAuth } = useAuthStore();
+  const {theme} = useThemeStore();
   useEffect(() => {
     checkAuth();
   }, []);
   if(isCheckingAuth  && !authUser){
     return(
        <div
-        data-theme="synthwave"
+        data-theme={theme}
         className="flex flex-col items-center justify-center h-screen bg-base-100 text-secondary"
       >
         <Loader2 className="w-12 h-12 animate-spin text-secondary drop-shadow-[0_0_10px_#f000b8]" />
@@ -29,7 +31,7 @@ const App = () => {
     )
   }
   return (
-    <div data-theme="synthwave">
+    <div data-theme={theme} className='min-h-screen bg-base-100 text-base-content'>
 
       <Navbar />
       <Routes>
