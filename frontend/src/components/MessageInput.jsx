@@ -37,6 +37,7 @@ const MessageInput = () => {
         text: text.trim(),
         image: imagePreview,
       });
+      console.log("Message successfully send");
 
       // Clear form
       setText("");
