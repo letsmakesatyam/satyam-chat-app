@@ -1,20 +1,18 @@
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
+import { useAuthStore } from "../store/useAuthStore"; // Import useAuthStore
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
 
 const Sidebar = () => {
-  // Ensure you destructure onlineUsers from the store
-  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading, onlineUsers } = useChatStore();
+  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
+  const { onlineUsers } = useAuthStore(); // Get onlineUsers from the correct store
 
   useEffect(() => {
     getUsers();
-  }, [getUsers]);
+  }, []); // Removed getUsers from dependency array to prevent re-fetching
 
   if (isUsersLoading) return <SidebarSkeleton />;
-
-  // Default to an empty array if onlineUsers is not yet set
-  const activeOnlineUsers = onlineUsers || [];
 
   return (
     <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
@@ -29,7 +27,7 @@ const Sidebar = () => {
       <div className="overflow-y-auto w-full py-3">
         {users.map((user) => {
           // Check if the current user ID is included in the list of online user IDs
-          const isOnline = activeOnlineUsers.includes(user._id);
+          const isOnline = onlineUsers.includes(user._id);
 
           return (
             <button
