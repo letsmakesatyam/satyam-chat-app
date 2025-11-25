@@ -1,19 +1,21 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Mail, Lock, Eye, EyeOff, Box } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom"; 
-
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { authUser, isLoggingIn, login } = useAuthStore();
 
-  const { authUser,isLoggingIn, login } = useAuthStore();
+  console.log("LoginPage render - authUser:", authUser);
+
   useEffect(() => {
- 
-  if (authUser) navigate("/");
-}, [authUser]);
+    console.log("useEffect triggered - authUser:", authUser);
+    if (authUser) {
+      console.log("Navigating to home...");
+      navigate("/", { replace: true });
+    }
+  }, [authUser, navigate]);
 
   const [formData, setFormData] = React.useState({
     email: "",
@@ -29,12 +31,15 @@ const navigate = useNavigate();
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login(formData , ()=>{
-      navigate("/")
-    });
-    
+    console.log("Submitting login...");
+    const success = await login(formData);
+    console.log("Login result:", success);
+    if (success) {
+      console.log("Login successful, navigating...");
+      navigate("/", { replace: true });
+    }
   };
 
   return (
@@ -115,7 +120,7 @@ const navigate = useNavigate();
 
         {/* Signup link */}
         <p className="text-center text-white mt-4">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <Link
             to="/signup"
             className="text-secondary font-semibold hover:underline"
