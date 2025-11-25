@@ -2,9 +2,18 @@ import React from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Mail, Lock, Eye, EyeOff, Box } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; 
+
 
 const LoginPage = () => {
-  const { isLoggingIn, login } = useAuthStore();
+const navigate = useNavigate();
+
+  const { authUser,isLoggingIn, login } = useAuthStore();
+  useEffect(() => {
+ 
+  if (authUser) navigate("/");
+}, [authUser]);
 
   const [formData, setFormData] = React.useState({
     email: "",
@@ -22,7 +31,10 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(formData);
+    login(formData , ()=>{
+      navigate("/")
+    });
+    
   };
 
   return (
