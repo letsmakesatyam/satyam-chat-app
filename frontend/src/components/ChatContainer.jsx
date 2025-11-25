@@ -7,14 +7,20 @@ import { useAuthStore } from '../store/useAuthStore';
 import { formatMessageTime } from "../lib/utils.js" 
 
 const ChatContainer = () => {
-  const { messages, getMessages, isMessagesLoading, selectedUser } = useChatStore();
+  const { messages, getMessages, isMessagesLoading, selectedUser , subscribeToMessages , unsubscribeFromMessages } = useChatStore();
   const { authUser } = useAuthStore();
   
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    subscribeToMessages();
+    return () => {
+      unsubscribeFromMessages();
+    };
   }, [messages]);
+
+
 
   useEffect(() => {
     if (selectedUser?._id) {
