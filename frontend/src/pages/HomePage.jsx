@@ -1,5 +1,5 @@
-import React from 'react'
-import { useChatStore } from '../store/useChatStore'
+import React from 'react';
+import { useChatStore } from '../store/useChatStore';
 import NoChatSelected from '../components/NoChatSelected';
 import ChatContainer from '../components/ChatContainer.jsx';
 import Sidebar from '../components/Sidebar.jsx';
@@ -8,20 +8,25 @@ const HomePage = () => {
   const { selectedUser } = useChatStore();
 
   return (
-    <div className="h-screen container mx-auto px-4 pt-20 max-w-5xl">
-      {/* Flex container to align sidebar + chat horizontally */}
-      <div className="flex gap-4 h-full">
-        
-        {/* Sidebar stays fixed width */}
-        <div className="w-1/4 min-w-[220px]">
-          <Sidebar />
-        </div>
+    <div className="h-screen bg-base-200">
+      <div className="flex items-center justify-center pt-20 px-4">
+        <div className="bg-base-100 rounded-lg shadow-cl w-full max-w-6xl h-[calc(100vh-8rem)]">
+          <div className="flex h-full rounded-lg overflow-hidden">
+            
+            {/* Sidebar component handles its own width (w-20 on mobile, w-72 on desktop).
+              We do NOT wrap it in a div with fixed width.
+            */}
+            <Sidebar />
 
-        {/* Chat section takes remaining space */}
-        <div className="flex-1">
-          {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
+            {/* Main Chat Area
+              We treat this as the flexible item that takes up remaining space.
+            */}
+            <div className="flex-1">
+              {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
+            </div>
+            
+          </div>
         </div>
-
       </div>
     </div>
   );
