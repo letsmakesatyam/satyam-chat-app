@@ -22,8 +22,6 @@ const ChatContainer = () => {
     };
   }, [messages]);
 
-
-
   useEffect(() => {
     if (selectedUser?._id) {
         getMessages(selectedUser._id);
@@ -32,7 +30,7 @@ const ChatContainer = () => {
   
   if (isMessagesLoading) {
     return (
-      <div className='flex flex-col h-full bg-base-100 rounded-lg border border-base-200'>
+      <div className='flex-1 flex flex-col h-full bg-base-100 lg:rounded-lg lg:border border-base-200 overflow-hidden'>
         <ChatHeader />
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
             <MessageSkeleton />
@@ -45,7 +43,9 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className='flex flex-col h-full bg-base-100 rounded-lg shadow-xl border border-base-200'> 
+    // FIX: Added 'flex-1' to fill space, removed fixed margins, 
+    // and made borders/rounding desktop-only (lg:) for better mobile fit
+    <div className='flex-1 flex flex-col h-full bg-base-100 lg:rounded-lg lg:shadow-xl lg:border border-base-200 overflow-hidden'> 
       
       <ChatHeader />
       
@@ -53,9 +53,15 @@ const ChatContainer = () => {
         
         {!messages?.length && (
           <div className="flex items-center justify-center h-full">
-            <p className="text-center text-lg text-base-content opacity-70 italic">
-                Say hello to {selectedUser.fullName || "your new friend"}! 👋
-            </p>
+            <div className="text-center px-4">
+               {/* Added fallback for users with no image */}
+               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4 animate-bounce">
+                  <span className="text-2xl">👋</span>
+               </div>
+               <p className="text-lg text-base-content opacity-70 italic">
+                  Say hello to <span className="font-bold text-primary">{selectedUser.fullName || "your new friend"}</span>!
+               </p>
+            </div>
           </div>
         )}
 
@@ -68,7 +74,6 @@ const ChatContainer = () => {
 
           const messageTime = formatMessageTime(msg.createdAt);
           
-          // Helper flags using the confirmed 'msg.image' property
           const hasImage = !!msg.image;
           const hasText = !!msg.text;
 
@@ -78,55 +83,42 @@ const ChatContainer = () => {
               className={`chat ${isSender ? "chat-end" : "chat-start"}`}
             >
               <div className='chat-image avatar'>
-                <div className='w-10 rounded-full'>
+                <div className='w-10 rounded-full border border-base-300'>
                   <img
-                    alt={`${isSender ? 'You' : selectedUser.fullName}'s avatar`}
+                    alt="avatar"
                     src={profilePic}
                     className="object-cover"
                   />
                 </div>
               </div>
               
-              <div className={`chat-header text-xs text-base-content opacity-50 ${isSender ? 'text-right' : 'text-left'}`}>
+              <div className={`chat-header text-xs text-base-content opacity-50 mb-1 ${isSender ? 'text-right' : 'text-left'}`}>
                 <time className="ml-1">{messageTime}</time>
               </div>
 
-              {/* 🖼️ CORRECTED CHAT BUBBLE LOGIC */}
               <div 
-                className={`chat-bubble ${
-                  // CRITICAL: Remove padding and hide overflow if an image is present
+                className={`chat-bubble flex flex-col ${
                   hasImage ? 'p-0 overflow-hidden' : ''
                 } ${
                   isSender 
                     ? "chat-bubble-primary text-primary-content" 
-                    : "chat-bubble-info text-info-content"
+                    : "chat-bubble-info text-info-content" // Changed to info/secondary for better contrast
                 }`}
               >
-                {/* Check for image first */}
-                {hasImage ? (
-                  // If image exists, render the image tag
+                {hasImage && (
                   <img
-                    src={msg.image} // Using msg.image as specified
-                    alt={hasText ? msg.text : "sent file"}
-                    // Use max-w-64 for consistency and to respect bubble size
-                    className="w-full max-w-64 h-auto rounded-xl object-cover" 
+                    src={msg.image}
+                    alt="attachment"
+                    className="w-full max-w-sm h-auto rounded-none sm:rounded-xl object-cover" 
                   />
-                ) : (
-                  // If no image, render text or empty placeholder
-                  <span className='p-3'>
-                    {msg.text || <i className='opacity-75'>(empty)</i>}
-                  </span>
                 )}
                 
-                {/* Render text content separately if both image and text exist 
-                   (This handles captions, but keeps the main logic cleaner for image-only) */}
-                {hasImage && hasText && (
-                   <span className="p-3 block text-xs opacity-80"> 
-                       {msg.text}
-                   </span>
+                {hasText && (
+                  <span className={`${hasImage ? 'p-3 pt-2 text-sm' : 'p-3'}`}>
+                    {msg.text}
+                  </span>
                 )}
               </div>
-              {/* 🖼️ END OF CHAT BUBBLE LOGIC */}
             </div>
           );
         })}
