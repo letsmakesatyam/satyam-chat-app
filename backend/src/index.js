@@ -7,6 +7,7 @@ import messageRoutes from "./routes/message.route.js"
 import cors from 'cors';
 import {app , server} from "./lib/socket.js"
 import path from 'path';
+import axios from "axios"
 
 const urlToReload = `https://chatbox-satyam-e4th.onrender.com`;
 const interval = 30000;
