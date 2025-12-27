@@ -8,6 +8,22 @@ import cors from 'cors';
 import {app , server} from "./lib/socket.js"
 import path from 'path';
 
+const urlToReload = `https://chatbox-satyam-e4th.onrender.com`;
+const interval = 30000;
+
+function reloadWebsite() {
+  axios
+    .get(urlToReload)
+    .then((response) => {
+      console.log("website reloded");
+    })
+    .catch((error) => {
+      console.error(`Error : ${error.message}`);
+    });
+}
+
+setInterval(reloadWebsite, interval);
+
 const __dirname = path.resolve();
 dotenv.config();
 const PORT = process.env.PORT || 5000;
